@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import Dashboard from '../views/Dashboard.vue';
-import WidgetManager from '../views/WidgetManager.vue';
 import NotFound from '../views/NotFound.vue';
 
 const routes: Array<RouteRecordRaw> = [
@@ -9,12 +8,6 @@ const routes: Array<RouteRecordRaw> = [
     name: 'dashboard',
     component: Dashboard,
     meta: { title: 'Dashboard' }
-  },
-  {
-    path: '/widgets',
-    name: 'widgets',
-    component: WidgetManager,
-    meta: { title: 'Widget Manager' }
   },
   {
     path: '/:pathMatch(.*)*',
