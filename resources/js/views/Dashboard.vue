@@ -128,17 +128,6 @@
           </div>
         </div>
 
-        <!-- Add Widget Button -->
-        <div class="bg-white dark:bg-dark-800 overflow-hidden shadow-md rounded-lg border-2 border-dashed border-dark-300 dark:border-dark-600">
-          <div class="p-6 flex items-center justify-center">
-            <router-link to="/widgets" class="text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300 flex items-center">
-              <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-              </svg>
-              <span class="text-lg font-medium">Add Widget</span>
-            </router-link>
-          </div>
-        </div>
       </template>
     </div>
   </div>
