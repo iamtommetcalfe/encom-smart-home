@@ -16,6 +16,16 @@ class HomeController extends Controller
      */
     public function index(): View
     {
+        return view('welcome');
+    }
+
+    /**
+     * Get dashboard data for the SPA.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function dashboardData()
+    {
         // Get the next collection for each bin type
         $binTypes = BinCollection::select('bin_type')
             ->distinct()
@@ -48,7 +58,7 @@ class HomeController extends Controller
         $currentWeather = $weatherController->current()->getData(true);
         $forecastWeather = $weatherController->forecast(new Request(['days' => 4]))->getData(true);
 
-        return view('welcome', [
+        return response()->json([
             'binCollections' => $nextCollections,
             'currentWeather' => $currentWeather,
             'forecastWeather' => $forecastWeather,

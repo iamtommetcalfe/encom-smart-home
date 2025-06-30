@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Widget;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 
 class WidgetController extends Controller
@@ -15,7 +16,7 @@ class WidgetController extends Controller
     public function index(): View
     {
         $widgets = Widget::all();
-        
+
         return view('widgets.index', compact('widgets'));
     }
 
@@ -124,5 +125,99 @@ class WidgetController extends Controller
         $widget->update($validated);
 
         return response()->json(['success' => true]);
+    }
+    /**
+     * Display a listing of the widgets (API).
+     *
+     * @return JsonResponse
+     */
+    public function indexApi(): JsonResponse
+    {
+        $widgets = Widget::all();
+
+        return response()->json([
+            'widgets' => $widgets
+        ]);
+    }
+
+    /**
+     * Store a newly created widget in storage (API).
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function storeApi(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'type' => 'required|string|max:255',
+            'position_x' => 'nullable|integer',
+            'position_y' => 'nullable|integer',
+            'width' => 'nullable|integer|min:1',
+            'height' => 'nullable|integer|min:1',
+            'settings' => 'nullable|json',
+        ]);
+
+        $widget = Widget::create($validated);
+
+        return response()->json([
+            'message' => 'Widget created successfully',
+            'widget' => $widget
+        ], 201);
+    }
+
+    /**
+     * Display the specified widget (API).
+     *
+     * @param Widget $widget
+     * @return JsonResponse
+     */
+    public function showApi(Widget $widget): JsonResponse
+    {
+        return response()->json([
+            'widget' => $widget
+        ]);
+    }
+
+    /**
+     * Update the specified widget in storage (API).
+     *
+     * @param Request $request
+     * @param Widget $widget
+     * @return JsonResponse
+     */
+    public function updateApi(Request $request, Widget $widget): JsonResponse
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'type' => 'required|string|max:255',
+            'position_x' => 'nullable|integer',
+            'position_y' => 'nullable|integer',
+            'width' => 'nullable|integer|min:1',
+            'height' => 'nullable|integer|min:1',
+            'settings' => 'nullable|json',
+        ]);
+
+        $widget->update($validated);
+
+        return response()->json([
+            'message' => 'Widget updated successfully',
+            'widget' => $widget
+        ]);
+    }
+
+    /**
+     * Remove the specified widget from storage (API).
+     *
+     * @param Widget $widget
+     * @return JsonResponse
+     */
+    public function destroyApi(Widget $widget): JsonResponse
+    {
+        $widget->delete();
+
+        return response()->json([
+            'message' => 'Widget deleted successfully'
+        ]);
     }
 }
