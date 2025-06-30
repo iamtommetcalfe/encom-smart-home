@@ -6,7 +6,7 @@
         <div class="bg-white dark:bg-dark-800 overflow-hidden shadow-md rounded-lg">
           <div class="p-6">
             <h1 class="text-2xl font-semibold text-dark-900 dark:text-dark-100">Welcome to Encom Smart Home</h1>
-            <p class="mt-2 text-dark-600 dark:text-dark-400">Your personal smart home dashboard. Add widgets to monitor and control your home.</p>
+            <p class="mt-2 text-dark-600 dark:text-dark-400">Your personal smart home dashboard.</p>
           </div>
         </div>
       </div>

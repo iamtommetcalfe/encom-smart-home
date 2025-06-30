@@ -1,61 +1,202 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Encom Smart Home Dashboard
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Encom is a modern smart home dashboard application designed to be served on your home network. It provides a centralized interface for monitoring and managing various aspects of your home, including weather information, bin collection schedules, and plant watering reminders.
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Single Page Application (SPA)**: Smooth, app-like experience with no page reloads
+- **Responsive Design**: Works on desktop, tablet, and mobile devices
+- **Dark Mode Support**: Easy on the eyes during nighttime use
+- **Multiple Widgets**:
+  - **Weather Widget**: Shows current weather and forecast for your location
+  - **Bin Collection Widget**: Tracks and reminds you of upcoming bin collection dates
+  - **Plant Watering Widget**: Helps you keep track of when to water your plants
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Technology Stack
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Backend**: Laravel (PHP framework)
+- **Frontend**: Vue.js 3 with TypeScript
+- **State Management**: Pinia
+- **Styling**: Tailwind CSS
+- **Database**: MySQL
+- **Development Environment**: Docker with Laravel Sail
 
-## Learning Laravel
+## Installation and Setup
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Prerequisites
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Before you begin, ensure you have the following installed on your system:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- [Docker](https://www.docker.com/get-started)
+- [Docker Compose](https://docs.docker.com/compose/install/) (usually included with Docker Desktop)
+- Git
 
-## Laravel Sponsors
+### Installation Steps
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+1. **Clone the repository**:
+   ```bash
+   git clone git@github.com:iamtommetcalfe/encom-smart-home.git
+   cd encom
+   ```
 
-### Premium Partners
+2. **Copy the environment file**:
+   ```bash
+   cp .env.example .env
+   ```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+3. **Make the helper script executable**:
+   ```bash
+   chmod +x docker-encom.sh
+   ```
 
-## Contributing
+4. **Build and start the Docker containers**:
+   ```bash
+   ./docker-encom.sh build
+   ./docker-encom.sh up
+   ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+5. **Install PHP dependencies**:
+   ```bash
+   ./docker-encom.sh composer install
+   ```
 
-## Code of Conduct
+6. **Generate application key**:
+   ```bash
+   ./docker-encom.sh artisan key:generate
+   ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+7. **Run database migrations**:
+   ```bash
+   ./docker-encom.sh migrate
+   ```
 
-## Security Vulnerabilities
+8. **Install Node.js dependencies**:
+   ```bash
+   ./docker-encom.sh npm install
+   ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+9. **Build frontend assets**:
+   ```bash
+   ./docker-encom.sh npm run build
+   ```
 
-## License
+### Custom Hostname Setup
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+The application can be configured to use the custom hostname `encom-smart-home.local`. To make this work on your local machine:
+
+#### On macOS and Linux:
+
+1. Edit the hosts file (requires administrator privileges):
+   ```bash
+   sudo nano /etc/hosts
+   ```
+
+2. Add the following line:
+   ```
+   127.0.0.1    encom-smart-home.local
+   ```
+
+3. Save the file (in nano: Ctrl+O, Enter, Ctrl+X).
+
+#### On Windows:
+
+1. Open Notepad as Administrator.
+2. Open the file `C:\Windows\System32\drivers\etc\hosts`.
+3. Add the following line:
+   ```
+   127.0.0.1    encom-smart-home.local
+   ```
+4. Save the file.
+
+After updating your hosts file, you should be able to access the application at http://encom-smart-home.local in your web browser.
+
+## Development Workflow
+
+### Helper Script Commands
+
+We've created a helper script (`docker-encom.sh`) to make working with Docker easier:
+
+- `./docker-encom.sh up`: Start the Docker containers
+- `./docker-encom.sh down`: Stop the Docker containers
+- `./docker-encom.sh build`: Build the Docker containers
+- `./docker-encom.sh restart`: Restart the Docker containers
+- `./docker-encom.sh bash`: Open a bash shell in the Laravel container
+- `./docker-encom.sh artisan [cmd]`: Run an Artisan command
+- `./docker-encom.sh composer [cmd]`: Run a Composer command
+- `./docker-encom.sh npm [cmd]`: Run an npm command
+- `./docker-encom.sh vite`: Start the Vite development server
+- `./docker-encom.sh migrate`: Run database migrations
+- `./docker-encom.sh fresh`: Reset the database and run all migrations
+- `./docker-encom.sh seed`: Seed the database
+- `./docker-encom.sh test`: Run PHPUnit tests
+- `./docker-encom.sh help`: Show the help message
+
+### Typical Development Workflow
+
+1. **Start the Docker containers**:
+   ```bash
+   ./docker-encom.sh up
+   ```
+
+2. **Start the Vite development server**:
+   ```bash
+   ./docker-encom.sh vite
+   ```
+
+3. **Make changes to your code**. The changes will be automatically reflected in the running application.
+
+4. **Run tests to ensure everything is working correctly**:
+   ```bash
+   ./docker-encom.sh test
+   ```
+
+5. **When you're done, stop the Docker containers**:
+   ```bash
+   ./docker-encom.sh down
+   ```
+
+## Database Management
+
+The MySQL database is running in a Docker container and is accessible from the Laravel container. You can also connect to it from your host machine using the following credentials:
+
+- **Host**: 127.0.0.1
+- **Port**: 3306
+- **Database**: encom
+- **Username**: sail
+- **Password**: password
+
+You can change these credentials in the `.env` file.
+
+## Testing the Docker Setup
+
+We've included a test script to verify that the Docker setup is working correctly:
+
+```bash
+chmod +x test-docker-setup.sh
+./test-docker-setup.sh
+```
+
+The script will:
+1. Build and start the Docker containers
+2. Run database migrations
+3. Check if the application is accessible via the custom hostname
+
+If all tests pass, you should see a success message.
+
+## Troubleshooting
+
+### Container Won't Start
+
+If a container won't start, check the Docker logs:
+
+```bash
+docker-compose logs
+```
+
+### Database Connection Issues
+
+If you're having issues connecting to the database, make sure the MySQL container is running and the database credentials in the `.env` file are correct.
+
+### Port Conflicts
+
+If you're seeing port conflicts, you might have another service running on the same port. You can change the port mappings in the `docker-compose.yml` file or stop the conflicting service.
