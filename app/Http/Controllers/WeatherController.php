@@ -10,17 +10,37 @@ use Illuminate\Support\Facades\Cache;
 class WeatherController extends Controller
 {
     /**
-     * The latitude of Austrey, UK.
+     * Get the latitude from environment variables.
+     *
+     * @return float
      */
-    protected const AUSTREY_LATITUDE = 52.6833;
+    protected function getLatitude(): float
+    {
+        return (float) env('WEATHER_LATITUDE', 52.6833);
+    }
 
     /**
-     * The longitude of Austrey, UK.
+     * Get the longitude from environment variables.
+     *
+     * @return float
      */
-    protected const AUSTREY_LONGITUDE = -1.5333;
+    protected function getLongitude(): float
+    {
+        return (float) env('WEATHER_LONGITUDE', -1.5333);
+    }
 
     /**
-     * Get current weather data for Austrey, UK.
+     * Get the location name from environment variables.
+     *
+     * @return string
+     */
+    protected function getLocation(): string
+    {
+        return env('WEATHER_LOCATION', 'Unknown Location');
+    }
+
+    /**
+     * Get current weather data for the configured location.
      *
      * @return JsonResponse
      */
@@ -35,7 +55,7 @@ class WeatherController extends Controller
     }
 
     /**
-     * Get weather forecast data for Austrey, UK.
+     * Get weather forecast data for the configured location.
      *
      * @param Request $request
      * @return JsonResponse
@@ -60,8 +80,8 @@ class WeatherController extends Controller
     protected function fetchCurrentWeather(): array
     {
         $response = Http::get('https://api.open-meteo.com/v1/forecast', [
-            'latitude' => self::AUSTREY_LATITUDE,
-            'longitude' => self::AUSTREY_LONGITUDE,
+            'latitude' => $this->getLatitude(),
+            'longitude' => $this->getLongitude(),
             'current' => 'temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m,wind_direction_10m',
             'timezone' => 'Europe/London',
         ]);
@@ -85,7 +105,7 @@ class WeatherController extends Controller
                     'wind_direction' => $data['current']['wind_direction_10m'] ?? null,
                     'time' => $data['current']['time'] ?? null,
                 ],
-                'location' => 'Austrey, UK',
+                'location' => $this->getLocation(),
             ];
         }
 
@@ -103,8 +123,8 @@ class WeatherController extends Controller
     protected function fetchForecast(int $days): array
     {
         $response = Http::get('https://api.open-meteo.com/v1/forecast', [
-            'latitude' => self::AUSTREY_LATITUDE,
-            'longitude' => self::AUSTREY_LONGITUDE,
+            'latitude' => $this->getLatitude(),
+            'longitude' => $this->getLongitude(),
             'daily' => 'temperature_2m_max,temperature_2m_min,precipitation_sum,weather_code',
             'timezone' => 'Europe/London',
             'forecast_days' => $days,
@@ -134,7 +154,7 @@ class WeatherController extends Controller
 
             return [
                 'forecast' => $forecast,
-                'location' => 'Austrey, UK',
+                'location' => $this->getLocation(),
             ];
         }
 
