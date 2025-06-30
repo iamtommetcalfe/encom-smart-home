@@ -2,12 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\BinCollection;
+use App\Services\BinCollectionService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
 class BinCollectionController extends Controller
 {
+    /**
+     * The bin collection service instance.
+     *
+     * @var BinCollectionService
+     */
+    protected $binCollectionService;
+
+    /**
+     * Create a new controller instance.
+     *
+     * @param BinCollectionService $binCollectionService
+     * @return void
+     */
+    public function __construct(BinCollectionService $binCollectionService)
+    {
+        $this->binCollectionService = $binCollectionService;
+    }
+
     /**
      * Get upcoming bin collections.
      *
@@ -17,21 +35,10 @@ class BinCollectionController extends Controller
     public function upcoming(Request $request): JsonResponse
     {
         $limit = $request->input('limit', 5);
-        $collections = BinCollection::upcoming($limit);
-
-        $formattedCollections = $collections->map(function ($collection) {
-            return [
-                'id' => $collection->id,
-                'collection_date' => $collection->collection_date->format('Y-m-d'),
-                'bin_type' => $collection->bin_type,
-                'color' => $collection->color,
-                'days_until' => $collection->daysUntilCollection(),
-                'days_until_human' => $collection->daysUntilCollectionForHumans(),
-            ];
-        });
+        $collections = $this->binCollectionService->getUpcomingCollections($limit);
 
         return response()->json([
-            'collections' => $formattedCollections,
+            'collections' => $collections,
         ]);
     }
 
@@ -42,35 +49,10 @@ class BinCollectionController extends Controller
      */
     public function nextCollections(): JsonResponse
     {
-        // Get all unique bin types
-        $binTypes = BinCollection::select('bin_type')
-            ->distinct()
-            ->pluck('bin_type');
-
-        $nextCollections = [];
-
-        foreach ($binTypes as $binType) {
-            $collection = BinCollection::nextCollectionForType($binType);
-
-            if ($collection) {
-                $nextCollections[] = [
-                    'id' => $collection->id,
-                    'collection_date' => $collection->collection_date->format('Y-m-d'),
-                    'bin_type' => $collection->bin_type,
-                    'color' => $collection->color,
-                    'days_until' => $collection->daysUntilCollection(),
-                    'days_until_human' => $collection->daysUntilCollectionForHumans(),
-                ];
-            }
-        }
-
-        // Sort by days until collection
-        usort($nextCollections, function ($a, $b) {
-            return $a['days_until'] - $b['days_until'];
-        });
+        $collections = $this->binCollectionService->getNextCollections();
 
         return response()->json([
-            'collections' => $nextCollections,
+            'collections' => $collections,
         ]);
     }
 }
