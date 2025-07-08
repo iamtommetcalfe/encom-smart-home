@@ -5,9 +5,37 @@ namespace App\Http\Controllers;
 use App\Services\BinCollectionService;
 use App\Services\WeatherService;
 use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
 
 class HomeController extends Controller
 {
+    /**
+     * The bin collection service instance.
+     *
+     * @var BinCollectionService
+     */
+    protected $binCollectionService;
+
+    /**
+     * The weather service instance.
+     *
+     * @var WeatherService
+     */
+    protected $weatherService;
+
+    /**
+     * Create a new controller instance.
+     *
+     * @param BinCollectionService $binCollectionService
+     * @param WeatherService $weatherService
+     * @return void
+     */
+    public function __construct(BinCollectionService $binCollectionService, WeatherService $weatherService)
+    {
+        $this->binCollectionService = $binCollectionService;
+        $this->weatherService = $weatherService;
+    }
+
     /**
      * Show the application dashboard.
      *
@@ -21,18 +49,16 @@ class HomeController extends Controller
     /**
      * Get dashboard data for the SPA.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function dashboardData()
+    public function dashboardData(): JsonResponse
     {
         // Get bin collection data
-        $binCollectionService = app(BinCollectionService::class);
-        $nextCollections = $binCollectionService->getNextCollections();
+        $nextCollections = $this->binCollectionService->getNextCollections();
 
         // Get weather data
-        $weatherService = app(WeatherService::class);
-        $currentWeather = $weatherService->getCurrentWeather();
-        $forecastWeather = $weatherService->getForecast(4);
+        $currentWeather = $this->weatherService->getCurrentWeather();
+        $forecastWeather = $this->weatherService->getForecast(4);
 
         return response()->json([
             'binCollections' => $nextCollections,
