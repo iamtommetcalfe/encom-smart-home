@@ -32,4 +32,14 @@ export default defineConfig({
             '@': '/resources/js',
         },
     },
+    server: {
+        host: '0.0.0.0',
+        hmr: {
+            host: '0.0.0.0',
+        },
+        watch: {
+            usePolling: true,
+            interval: 1000,
+        },
+    },
 });
