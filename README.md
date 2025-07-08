@@ -10,7 +10,7 @@ Encom is a modern smart home dashboard application designed to be served on your
 - **Multiple Widgets**:
   - **Weather Widget**: Shows current weather and forecast for your location
   - **Bin Collection Widget**: Tracks and reminds you of upcoming bin collection dates
-  - **Plant Watering Widget**: Helps you keep track of when to water your plants
+  - **Plant Watering Widget**: Provides watering recommendations based on current and forecasted weather conditions
 
 ## Technology Stack
 
@@ -183,6 +183,20 @@ The script will:
 
 If all tests pass, you should see a success message.
 
+## Plant Watering Logic
+
+The Plant Watering Widget provides recommendations on when to water your plants based on current and forecasted weather conditions. The logic takes into account:
+
+1. **Current Precipitation**: If it's currently raining heavily (precipitation > 5mm), the widget will recommend waiting to water your plants.
+
+2. **Forecasted Precipitation**: If significant rain (> 10mm) is forecasted in the next 3 days, the widget will recommend waiting to water your plants.
+
+3. **Current Temperature**: If it's very hot (temperature > 28°C), the widget will recommend watering your plants immediately to prevent dehydration.
+
+4. **Dry Conditions**: If it's currently dry (no precipitation) and little rain (< 5mm) is expected in the forecast, the widget will recommend watering your plants.
+
+The widget displays a clear recommendation (Water Now or Wait to Water) along with an explanation of the reasoning behind the recommendation. It also shows a 3-day weather forecast to help you plan your watering schedule.
+
 ## Troubleshooting
 
 ### Container Won't Start
@@ -200,3 +214,34 @@ If you're having issues connecting to the database, make sure the MySQL containe
 ### Port Conflicts
 
 If you're seeing port conflicts, you might have another service running on the same port. You can change the port mappings in the `docker-compose.yml` file or stop the conflicting service.
+
+### Vite Hot Module Replacement (HMR) Issues
+
+If changes to your frontend files are not automatically reflected in the browser when using the Vite development server, ensure that:
+
+1. The Vite server is properly configured for Docker in the `vite.config.js` file by adding:
+   ```
+   server: {
+     host: '0.0.0.0',
+     hmr: {
+       host: '0.0.0.0',
+     },
+     watch: {
+       usePolling: true,
+       interval: 1000,
+     },
+   },
+   ```
+
+2. The Docker container has the correct volume mapping in `docker-compose.yml`:
+   ```
+   volumes:
+     - '.:/var/www/html'
+   ```
+
+3. Restart the Vite development server after making these changes:
+   ```
+   ./docker-encom.sh down
+   ./docker-encom.sh up
+   ./docker-encom.sh vite
+   ```

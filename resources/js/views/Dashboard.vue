@@ -90,41 +90,13 @@
           </div>
         </div>
 
-        <!-- Plant Watering Widget Placeholder -->
+        <!-- Plant Watering Widget -->
         <div class="bg-white dark:bg-dark-800 overflow-hidden shadow-md rounded-lg">
           <div class="p-4 bg-success-500 dark:bg-success-700">
             <h2 class="text-lg font-semibold text-white">Plant Watering</h2>
           </div>
           <div class="p-6">
-            <div class="space-y-4">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center">
-                  <svg class="w-5 h-5 text-danger-500 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"></path>
-                  </svg>
-                  <p class="text-dark-900 dark:text-dark-100 font-medium">Fiddle Leaf Fig</p>
-                </div>
-                <p class="text-danger-500 text-sm font-medium">Overdue 2 days</p>
-              </div>
-              <div class="flex items-center justify-between">
-                <div class="flex items-center">
-                  <svg class="w-5 h-5 text-warning-500 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"></path>
-                  </svg>
-                  <p class="text-dark-900 dark:text-dark-100 font-medium">Snake Plant</p>
-                </div>
-                <p class="text-warning-500 text-sm font-medium">Today</p>
-              </div>
-              <div class="flex items-center justify-between">
-                <div class="flex items-center">
-                  <svg class="w-5 h-5 text-success-500 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"></path>
-                  </svg>
-                  <p class="text-dark-900 dark:text-dark-100 font-medium">Monstera</p>
-                </div>
-                <p class="text-success-500 text-sm font-medium">In 3 days</p>
-              </div>
-            </div>
+            <PlantWateringWidget />
           </div>
         </div>
 
@@ -136,9 +108,13 @@
 <script lang="ts">
 import { defineComponent, onMounted } from 'vue';
 import { useDashboardStore } from '../stores';
+import PlantWateringWidget from '../widgets/PlantWateringWidget.vue';
 
 export default defineComponent({
   name: 'Dashboard',
+  components: {
+    PlantWateringWidget
+  },
 
   setup() {
     const dashboardStore = useDashboardStore();
