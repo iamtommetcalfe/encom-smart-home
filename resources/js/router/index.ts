@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import Dashboard from '../views/Dashboard.vue';
+import SmartDevices from '../views/SmartDevices.vue';
 import NotFound from '../views/NotFound.vue';
 
 const routes: Array<RouteRecordRaw> = [
@@ -8,6 +9,12 @@ const routes: Array<RouteRecordRaw> = [
     name: 'dashboard',
     component: Dashboard,
     meta: { title: 'Dashboard' }
+  },
+  {
+    path: '/smart-devices',
+    name: 'smart-devices',
+    component: SmartDevices,
+    meta: { title: 'Smart Devices' }
   },
   {
     path: '/:pathMatch(.*)*',

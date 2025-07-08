@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Services\BinCollectionService;
 use App\Services\WeatherService;
+use App\Services\SmartHomeService;
+use App\Services\SmartHomeWidgetService;
 use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
 
@@ -24,16 +26,38 @@ class HomeController extends Controller
     protected $weatherService;
 
     /**
+     * The smart home service instance.
+     *
+     * @var SmartHomeService
+     */
+    protected $smartHomeService;
+
+    /**
+     * The smart home widget service instance.
+     *
+     * @var SmartHomeWidgetService
+     */
+    protected $smartHomeWidgetService;
+
+    /**
      * Create a new controller instance.
      *
      * @param BinCollectionService $binCollectionService
      * @param WeatherService $weatherService
+     * @param SmartHomeService $smartHomeService
+     * @param SmartHomeWidgetService $smartHomeWidgetService
      * @return void
      */
-    public function __construct(BinCollectionService $binCollectionService, WeatherService $weatherService)
-    {
+    public function __construct(
+        BinCollectionService $binCollectionService,
+        WeatherService $weatherService,
+        SmartHomeService $smartHomeService,
+        SmartHomeWidgetService $smartHomeWidgetService
+    ) {
         $this->binCollectionService = $binCollectionService;
         $this->weatherService = $weatherService;
+        $this->smartHomeService = $smartHomeService;
+        $this->smartHomeWidgetService = $smartHomeWidgetService;
     }
 
     /**
@@ -60,10 +84,20 @@ class HomeController extends Controller
         $currentWeather = $this->weatherService->getCurrentWeather();
         $forecastWeather = $this->weatherService->getForecast(4);
 
+        // Get smart devices for the widget
+        $widgetConfigs = $this->smartHomeWidgetService->getWidgetConfigs();
+        $widgetConfig = $widgetConfigs->first();
+        $smartDevices = [];
+
+        if ($widgetConfig) {
+            $smartDevices = $this->smartHomeWidgetService->getDevicesForWidget($widgetConfig->id);
+        }
+
         return response()->json([
             'binCollections' => $nextCollections,
             'currentWeather' => $currentWeather,
             'forecastWeather' => $forecastWeather,
+            'smartDevices' => $smartDevices,
         ]);
     }
 }
