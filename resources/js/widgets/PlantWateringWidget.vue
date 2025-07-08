@@ -4,8 +4,8 @@
       <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary-500"></div>
     </div>
 
-    <div v-else-if="error" class="p-6 text-danger-500">
-      <p>{{ error }}</p>
+      <div v-else-if="wateringStatus === 'error'" class="p-6 text-danger-500">
+          <p>Unable to determine watering recommendation due to missing weather data.</p>
     </div>
 
     <div v-else class="space-y-4">
@@ -37,7 +37,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, onMounted } from 'vue';
+import { defineComponent, ref, computed } from 'vue';
 import { useDashboardStore } from '../stores';
 
 interface ForecastDay {
@@ -53,7 +53,6 @@ export default defineComponent({
   setup() {
     const dashboardStore = useDashboardStore();
     const loading = ref(false);
-    const error = ref<string | null>(null);
 
     // Watering status: 'water', 'wait', 'error'
     const wateringStatus = computed(() => {
@@ -101,7 +100,7 @@ export default defineComponent({
       if (wateringStatus.value === 'water') {
         if (currentWeather.temperature > 28) {
           return 'It\'s hot today! Your plants will need water to stay hydrated.';
-        } else if (currentWeather.precipitation === 0 && forecast[0].precipitation_sum < 5) {
+        } else if (currentWeather.precipitation === 0 && (forecast[0]?.precipitation_sum || 0) < 5) {
           return 'Dry conditions expected. Water your plants today to keep them healthy.';
         }
         return 'Conditions are suitable for watering your plants today.';
@@ -159,7 +158,6 @@ export default defineComponent({
 
     return {
       loading,
-      error,
       wateringStatus,
       wateringRecommendation,
       forecastDays,
