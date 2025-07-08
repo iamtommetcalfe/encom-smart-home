@@ -3,10 +3,28 @@
 namespace App\Services;
 
 use App\Models\BinCollection;
+use App\Repositories\BinCollectionRepositoryInterface;
 use Carbon\Carbon;
 
 class BinCollectionService
 {
+    /**
+     * The bin collection repository instance.
+     *
+     * @var BinCollectionRepositoryInterface
+     */
+    protected $binCollectionRepository;
+
+    /**
+     * Create a new service instance.
+     *
+     * @param BinCollectionRepositoryInterface $binCollectionRepository
+     * @return void
+     */
+    public function __construct(BinCollectionRepositoryInterface $binCollectionRepository)
+    {
+        $this->binCollectionRepository = $binCollectionRepository;
+    }
     /**
      * Get upcoming bin collections.
      *
@@ -15,10 +33,7 @@ class BinCollectionService
      */
     public function getUpcomingCollections(int $limit = 5): array
     {
-        $collections = BinCollection::where('collection_date', '>=', Carbon::today())
-            ->orderBy('collection_date')
-            ->limit($limit)
-            ->get();
+        $collections = $this->binCollectionRepository->getUpcoming($limit);
 
         return $this->formatCollections($collections);
     }
@@ -31,9 +46,7 @@ class BinCollectionService
     public function getNextCollections(): array
     {
         // Get all unique bin types
-        $binTypes = BinCollection::select('bin_type')
-            ->distinct()
-            ->pluck('bin_type');
+        $binTypes = $this->binCollectionRepository->getBinTypes();
 
         $nextCollections = [];
 
@@ -61,10 +74,7 @@ class BinCollectionService
      */
     public function getNextCollectionForType(string $binType): ?array
     {
-        $collection = BinCollection::where('bin_type', $binType)
-            ->where('collection_date', '>=', Carbon::today())
-            ->orderBy('collection_date')
-            ->first();
+        $collection = $this->binCollectionRepository->getNextCollectionForType($binType);
 
         if (!$collection) {
             return null;

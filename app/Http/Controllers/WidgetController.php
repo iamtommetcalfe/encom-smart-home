@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Widget;
+use App\Services\WidgetService;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\JsonResponse;
@@ -11,11 +11,28 @@ use Illuminate\View\View;
 class WidgetController extends Controller
 {
     /**
+     * The widget service instance.
+     *
+     * @var WidgetService
+     */
+    protected $widgetService;
+
+    /**
+     * Create a new controller instance.
+     *
+     * @param WidgetService $widgetService
+     * @return void
+     */
+    public function __construct(WidgetService $widgetService)
+    {
+        $this->widgetService = $widgetService;
+    }
+    /**
      * Display a listing of the widgets.
      */
     public function index(): View
     {
-        $widgets = Widget::all();
+        $widgets = $this->widgetService->getAllWidgets();
 
         return view('widgets.index', compact('widgets'));
     }
@@ -43,7 +60,7 @@ class WidgetController extends Controller
             'settings' => 'nullable|json',
         ]);
 
-        Widget::create($validated);
+        $this->widgetService->createWidget($validated);
 
         return redirect()->route('widgets.index')
             ->with('success', 'Widget created successfully.');
@@ -52,23 +69,25 @@ class WidgetController extends Controller
     /**
      * Display the specified widget.
      */
-    public function show(Widget $widget): View
+    public function show($id): View
     {
+        $widget = $this->widgetService->findWidget($id);
         return view('widgets.show', compact('widget'));
     }
 
     /**
      * Show the form for editing the specified widget.
      */
-    public function edit(Widget $widget): View
+    public function edit($id): View
     {
+        $widget = $this->widgetService->findWidget($id);
         return view('widgets.edit', compact('widget'));
     }
 
     /**
      * Update the specified widget in storage.
      */
-    public function update(Request $request, Widget $widget): RedirectResponse
+    public function update(Request $request, $id): RedirectResponse
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -80,7 +99,7 @@ class WidgetController extends Controller
             'settings' => 'nullable|json',
         ]);
 
-        $widget->update($validated);
+        $this->widgetService->updateWidget($id, $validated);
 
         return redirect()->route('widgets.index')
             ->with('success', 'Widget updated successfully.');
@@ -89,9 +108,9 @@ class WidgetController extends Controller
     /**
      * Remove the specified widget from storage.
      */
-    public function destroy(Widget $widget): RedirectResponse
+    public function destroy($id): RedirectResponse
     {
-        $widget->delete();
+        $this->widgetService->deleteWidget($id);
 
         return redirect()->route('widgets.index')
             ->with('success', 'Widget deleted successfully.');
@@ -100,14 +119,14 @@ class WidgetController extends Controller
     /**
      * Update the position of a widget via AJAX.
      */
-    public function updatePosition(Request $request, Widget $widget)
+    public function updatePosition(Request $request, $id)
     {
         $validated = $request->validate([
             'position_x' => 'required|integer',
             'position_y' => 'required|integer',
         ]);
 
-        $widget->update($validated);
+        $this->widgetService->updateWidget($id, $validated);
 
         return response()->json(['success' => true]);
     }
@@ -115,14 +134,14 @@ class WidgetController extends Controller
     /**
      * Update the size of a widget via AJAX.
      */
-    public function updateSize(Request $request, Widget $widget)
+    public function updateSize(Request $request, $id)
     {
         $validated = $request->validate([
             'width' => 'required|integer|min:1',
             'height' => 'required|integer|min:1',
         ]);
 
-        $widget->update($validated);
+        $this->widgetService->updateWidget($id, $validated);
 
         return response()->json(['success' => true]);
     }
@@ -133,7 +152,7 @@ class WidgetController extends Controller
      */
     public function indexApi(): JsonResponse
     {
-        $widgets = Widget::all();
+        $widgets = $this->widgetService->getAllWidgets();
 
         return response()->json([
             'widgets' => $widgets
@@ -158,7 +177,7 @@ class WidgetController extends Controller
             'settings' => 'nullable|json',
         ]);
 
-        $widget = Widget::create($validated);
+        $widget = $this->widgetService->createWidget($validated);
 
         return response()->json([
             'message' => 'Widget created successfully',
@@ -169,11 +188,13 @@ class WidgetController extends Controller
     /**
      * Display the specified widget (API).
      *
-     * @param Widget $widget
+     * @param int $id
      * @return JsonResponse
      */
-    public function showApi(Widget $widget): JsonResponse
+    public function showApi($id): JsonResponse
     {
+        $widget = $this->widgetService->findWidget($id);
+
         return response()->json([
             'widget' => $widget
         ]);
@@ -183,10 +204,10 @@ class WidgetController extends Controller
      * Update the specified widget in storage (API).
      *
      * @param Request $request
-     * @param Widget $widget
+     * @param int $id
      * @return JsonResponse
      */
-    public function updateApi(Request $request, Widget $widget): JsonResponse
+    public function updateApi(Request $request, $id): JsonResponse
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -198,7 +219,7 @@ class WidgetController extends Controller
             'settings' => 'nullable|json',
         ]);
 
-        $widget->update($validated);
+        $widget = $this->widgetService->updateWidget($id, $validated);
 
         return response()->json([
             'message' => 'Widget updated successfully',
@@ -209,12 +230,12 @@ class WidgetController extends Controller
     /**
      * Remove the specified widget from storage (API).
      *
-     * @param Widget $widget
+     * @param int $id
      * @return JsonResponse
      */
-    public function destroyApi(Widget $widget): JsonResponse
+    public function destroyApi($id): JsonResponse
     {
-        $widget->delete();
+        $this->widgetService->deleteWidget($id);
 
         return response()->json([
             'message' => 'Widget deleted successfully'
