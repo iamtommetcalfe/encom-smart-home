@@ -40,10 +40,21 @@ interface BinCollection {
   days_until_human: string;
 }
 
+interface SmartDevice {
+  id: number;
+  name: string;
+  deviceType: string;
+  room: string;
+  isOn: boolean;
+  platform: string;
+  capabilities: string[];
+}
+
 interface DashboardState {
   currentWeather: WeatherData | null;
   forecastWeather: ForecastData | null;
   binCollections: BinCollection[];
+  smartDevices: SmartDevice[];
   loading: boolean;
   error: string | null;
 }
@@ -54,6 +65,7 @@ export const useDashboardStore = defineStore('dashboard', {
     currentWeather: null,
     forecastWeather: null,
     binCollections: [],
+    smartDevices: [],
     loading: false,
     error: null
   }),
@@ -70,6 +82,25 @@ export const useDashboardStore = defineStore('dashboard', {
           this.currentWeather = response.data.currentWeather;
           this.forecastWeather = response.data.forecastWeather;
           this.binCollections = response.data.binCollections;
+        }
+
+        // Fetch smart devices for the widget
+        try {
+          const smartDevicesResponse = await axios.get('/api/smart-home/widget-config');
+          if (smartDevicesResponse.data && smartDevicesResponse.data.devices) {
+            this.smartDevices = smartDevicesResponse.data.devices.map(device => ({
+              id: device.id,
+              name: device.name,
+              deviceType: device.device_type,
+              room: device.room || '',
+              isOn: device.last_state?.power || false,
+              platform: device.platform?.name || 'Unknown',
+              capabilities: device.capabilities || []
+            }));
+          }
+        } catch (smartDevicesError) {
+          console.error('Error fetching smart devices:', smartDevicesError);
+          // Don't set the main error state, just log the error
         }
       } catch (error) {
         console.error('Error fetching dashboard data:', error);

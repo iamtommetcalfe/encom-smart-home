@@ -35,4 +35,16 @@ return [
         ],
     ],
 
+    'alexa' => [
+        'client_id' => env('ALEXA_CLIENT_ID'),
+        'client_secret' => env('ALEXA_CLIENT_SECRET'),
+        'redirect' => env('ALEXA_REDIRECT_URI'),
+    ],
+
+    'tuya' => [
+        'client_id' => env('TUYA_CLIENT_ID'),
+        'client_secret' => env('TUYA_CLIENT_SECRET'),
+        'region' => env('TUYA_REGION', 'eu'),
+    ],
+
 ];

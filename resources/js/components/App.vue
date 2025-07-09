@@ -19,6 +19,13 @@
                             >
                                 Dashboard
                             </router-link>
+                            <router-link
+                                to="/smart-devices"
+                                class="inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium leading-5 transition"
+                                :class="[$route.name === 'smart-devices' ? 'border-primary-500 text-dark-900 dark:text-dark-100' : 'border-transparent text-dark-500 dark:text-dark-300 hover:text-dark-700 dark:hover:text-dark-200 hover:border-dark-300 dark:hover:border-dark-700']"
+                            >
+                                Smart Devices
+                            </router-link>
                         </div>
                     </div>
 
@@ -56,6 +63,14 @@
                         @click="mobileMenuOpen = false"
                     >
                         Dashboard
+                    </router-link>
+                    <router-link
+                        to="/smart-devices"
+                        class="block pl-3 pr-4 py-2 border-l-4 text-base font-medium transition"
+                        :class="[$route.name === 'smart-devices' ? 'border-primary-500 text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/20' : 'border-transparent text-dark-600 dark:text-dark-400 hover:text-dark-800 dark:hover:text-dark-200 hover:bg-dark-50 dark:hover:bg-dark-700 hover:border-dark-300 dark:hover:border-dark-600']"
+                        @click="mobileMenuOpen = false"
+                    >
+                        Smart Devices
                     </router-link>
                 </div>
             </div>

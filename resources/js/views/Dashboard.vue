@@ -25,6 +25,16 @@
       </div>
 
       <template v-else>
+        <!-- Smart Devices Widget (Full Width) -->
+        <div class="col-span-1 md:col-span-2 lg:col-span-3 bg-white dark:bg-dark-800 overflow-hidden shadow-md rounded-lg mb-6">
+          <div class="p-4 bg-primary-600 dark:bg-primary-800">
+            <h2 class="text-lg font-semibold text-white">Smart Devices</h2>
+          </div>
+          <div class="p-6">
+            <SmartDevicesWidget />
+          </div>
+        </div>
+
         <!-- Weather Widget -->
         <div class="bg-white dark:bg-dark-800 overflow-hidden shadow-md rounded-lg">
           <div class="p-4 bg-primary-500 dark:bg-primary-700">
@@ -109,11 +119,13 @@
 import { defineComponent, onMounted } from 'vue';
 import { useDashboardStore } from '../stores';
 import PlantWateringWidget from '../widgets/PlantWateringWidget.vue';
+import SmartDevicesWidget from '../widgets/SmartDevicesWidget.vue';
 
 export default defineComponent({
   name: 'Dashboard',
   components: {
-    PlantWateringWidget
+    PlantWateringWidget,
+    SmartDevicesWidget
   },
 
   setup() {
