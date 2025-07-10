@@ -5,8 +5,8 @@
       <div class="col-span-1 md:col-span-2 lg:col-span-3">
         <div class="bg-white dark:bg-dark-800 overflow-hidden shadow-md rounded-lg">
           <div class="p-6">
-            <h1 class="text-2xl font-semibold text-dark-900 dark:text-dark-100">Welcome to Encom Smart Home</h1>
-            <p class="mt-2 text-dark-600 dark:text-dark-400">Your personal smart home dashboard.</p>
+            <h1 class="text-2xl font-semibold text-dark-900 dark:text-dark-100">Welcome to Encom Home Dashboard</h1>
+            <p class="mt-2 text-dark-600 dark:text-dark-400">Your personal home dashboard.</p>
           </div>
         </div>
       </div>
@@ -25,15 +25,7 @@
       </div>
 
       <template v-else>
-        <!-- Smart Devices Widget (Full Width) -->
-        <div class="col-span-1 md:col-span-2 lg:col-span-3 bg-white dark:bg-dark-800 overflow-hidden shadow-md rounded-lg mb-6">
-          <div class="p-4 bg-primary-600 dark:bg-primary-800">
-            <h2 class="text-lg font-semibold text-white">Smart Devices</h2>
-          </div>
-          <div class="p-6">
-            <SmartDevicesWidget />
-          </div>
-        </div>
+        <!-- Smart device functionality has been removed -->
 
         <!-- Weather Widget -->
         <div class="bg-white dark:bg-dark-800 overflow-hidden shadow-md rounded-lg">
@@ -119,13 +111,13 @@
 import { defineComponent, onMounted } from 'vue';
 import { useDashboardStore } from '../stores';
 import PlantWateringWidget from '../widgets/PlantWateringWidget.vue';
-import SmartDevicesWidget from '../widgets/SmartDevicesWidget.vue';
+// Smart device functionality has been removed
 
 export default defineComponent({
   name: 'Dashboard',
   components: {
-    PlantWateringWidget,
-    SmartDevicesWidget
+    PlantWateringWidget
+    // Smart device functionality has been removed
   },
 
   setup() {

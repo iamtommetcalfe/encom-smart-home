@@ -4,8 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\BinCollectionService;
 use App\Services\WeatherService;
-use App\Services\SmartHomeService;
-use App\Services\SmartHomeWidgetService;
+// Smart home functionality has been removed
 use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
 
@@ -25,39 +24,21 @@ class HomeController extends Controller
      */
     protected $weatherService;
 
-    /**
-     * The smart home service instance.
-     *
-     * @var SmartHomeService
-     */
-    protected $smartHomeService;
-
-    /**
-     * The smart home widget service instance.
-     *
-     * @var SmartHomeWidgetService
-     */
-    protected $smartHomeWidgetService;
+    // Smart home functionality has been removed
 
     /**
      * Create a new controller instance.
      *
      * @param BinCollectionService $binCollectionService
      * @param WeatherService $weatherService
-     * @param SmartHomeService $smartHomeService
-     * @param SmartHomeWidgetService $smartHomeWidgetService
      * @return void
      */
     public function __construct(
         BinCollectionService $binCollectionService,
-        WeatherService $weatherService,
-        SmartHomeService $smartHomeService,
-        SmartHomeWidgetService $smartHomeWidgetService
+        WeatherService $weatherService
     ) {
         $this->binCollectionService = $binCollectionService;
         $this->weatherService = $weatherService;
-        $this->smartHomeService = $smartHomeService;
-        $this->smartHomeWidgetService = $smartHomeWidgetService;
     }
 
     /**
@@ -84,20 +65,13 @@ class HomeController extends Controller
         $currentWeather = $this->weatherService->getCurrentWeather();
         $forecastWeather = $this->weatherService->getForecast(4);
 
-        // Get smart devices for the widget
-        $widgetConfigs = $this->smartHomeWidgetService->getWidgetConfigs();
-        $widgetConfig = $widgetConfigs->first();
-        $smartDevices = [];
-
-        if ($widgetConfig) {
-            $smartDevices = $this->smartHomeWidgetService->getDevicesForWidget($widgetConfig->id);
-        }
+        // Smart home functionality has been removed
 
         return response()->json([
             'binCollections' => $nextCollections,
             'currentWeather' => $currentWeather,
             'forecastWeather' => $forecastWeather,
-            'smartDevices' => $smartDevices,
+            // Smart home functionality has been removed
         ]);
     }
 }

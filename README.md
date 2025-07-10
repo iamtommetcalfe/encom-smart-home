@@ -1,6 +1,6 @@
-# Encom Smart Home Dashboard
+# Encom Home Dashboard
 
-Encom is a modern smart home dashboard application designed to be served on your home network. It provides a centralized interface for monitoring and managing various aspects of your home, including weather information, bin collection schedules, and plant watering reminders.
+Encom is a modern home dashboard application designed to be served on your home network. It provides a centralized interface for monitoring various aspects of your home, including weather information, bin collection schedules, and plant watering reminders.
 
 ## Features
 
@@ -35,7 +35,7 @@ Before you begin, ensure you have the following installed on your system:
 
 1. **Clone the repository**:
    ```bash
-   git clone git@github.com:iamtommetcalfe/encom-smart-home.git
+   git clone git@github.com:iamtommetcalfe/encom-home.git
    cd encom
    ```
 
@@ -82,7 +82,7 @@ Before you begin, ensure you have the following installed on your system:
 
 ### Custom Hostname Setup
 
-The application can be configured to use the custom hostname `encom-smart-home.local`. To make this work on your local machine:
+The application can be configured to use the custom hostname `encom-home.local`. To make this work on your local machine:
 
 #### On macOS and Linux:
 
@@ -93,7 +93,7 @@ The application can be configured to use the custom hostname `encom-smart-home.l
 
 2. Add the following line:
    ```
-   127.0.0.1    encom-smart-home.local
+   127.0.0.1    encom-home.local
    ```
 
 3. Save the file (in nano: Ctrl+O, Enter, Ctrl+X).
@@ -104,11 +104,11 @@ The application can be configured to use the custom hostname `encom-smart-home.l
 2. Open the file `C:\Windows\System32\drivers\etc\hosts`.
 3. Add the following line:
    ```
-   127.0.0.1    encom-smart-home.local
+   127.0.0.1    encom-home.local
    ```
 4. Save the file.
 
-After updating your hosts file, you should be able to access the application at http://encom-smart-home.local in your web browser.
+After updating your hosts file, you should be able to access the application at http://encom-home.local in your web browser.
 
 ## Development Workflow
 
